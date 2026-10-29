@@ -12,7 +12,11 @@ import android.view.WindowManager;
 import android.view.animation.AnimationUtils;
 
 /**
- * Launcher screen: shows a short "Not Available" pop-up and then closes itself.
+ * Invisible launcher screen.
+ *
+ * The activity window itself is fully transparent (see Theme.PubgWallpaper), so tapping the
+ * launcher icon never shows an app screen. Only a small "Not Available" pop-up appears, and
+ * then the app closes itself.
  */
 public class MainActivity extends Activity {
 
@@ -32,7 +36,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        // No content view on purpose: the window stays invisible.
         showNotAvailablePopup();
     }
 
@@ -45,11 +49,9 @@ public class MainActivity extends Activity {
 
         Window window = popup.getWindow();
         if (window != null) {
+            // No dim behind: the screen underneath must look completely unchanged.
             window.setBackgroundDrawable(new ColorDrawable(0x00000000));
-            window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-            WindowManager.LayoutParams attrs = window.getAttributes();
-            attrs.dimAmount = 0.75f;
-            window.setAttributes(attrs);
+            window.clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
             window.setLayout(
                     (int) (getResources().getDisplayMetrics().widthPixels * 0.84f),
                     WindowManager.LayoutParams.WRAP_CONTENT);
