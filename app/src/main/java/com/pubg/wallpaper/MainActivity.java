@@ -2,7 +2,10 @@ package com.pubg.wallpaper;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -15,13 +18,16 @@ import android.view.animation.AnimationUtils;
  * Invisible launcher screen.
  *
  * The activity window itself is fully transparent (see Theme.PubgWallpaper), so tapping the
- * launcher icon never shows an app screen. Only a small "Not Available" pop-up appears, and
- * then the app closes itself.
+ * launcher icon never shows an app screen. A small "Not Available" pop-up appears for a moment,
+ * then the Play Store opens on a search for "pubg wallpaper" and the app closes itself.
  */
 public class MainActivity extends Activity {
 
-    /** How long the pop-up stays on screen before the app closes itself. */
-    private static final long POPUP_LIFETIME_MS = 2200L;
+    /** Search term that opens in the Play Store. */
+    private static final String PLAY_STORE_QUERY = "pubg wallpaper";
+
+    /** How long the pop-up stays on screen before the store opens and the app closes. */
+    private static final long POPUP_LIFETIME_MS = 1500L;
 
     private final Handler handler = new Handler(Looper.getMainLooper());
     private Dialog popup;
@@ -29,7 +35,10 @@ public class MainActivity extends Activity {
     private final Runnable closeTask = new Runnable() {
         @Override
         public void run() {
-            closeAndExit();
+            dismissPopup();
+            openPlayStoreSearch();
+            finishAndRemoveTask();
+            overridePendingTransition(0, 0);
         }
     };
 
@@ -66,7 +75,30 @@ public class MainActivity extends Activity {
         handler.postDelayed(closeTask, POPUP_LIFETIME_MS);
     }
 
-    private void closeAndExit() {
+    /** Opens the Play Store app search; falls back to the web store if Play Store is absent. */
+    private void openPlayStoreSearch() {
+        String encoded = Uri.encode(PLAY_STORE_QUERY);
+
+        Intent market = new Intent(Intent.ACTION_VIEW,
+                Uri.parse("market://search?q=" + encoded + "&c=apps"));
+        market.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        try {
+            startActivity(market);
+            return;
+        } catch (ActivityNotFoundException ignored) {
+            // Play Store not installed - fall through to the browser.
+        }
+
+        Intent web = new Intent(Intent.ACTION_VIEW,
+                Uri.parse("https://play.google.com/store/search" + encoded + "&c=apps"));
+        web.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        try {
+            startActivity(web);
+        } catch (Exception ignored) {
+        }
+    }
+
+    private void dismissPopup() {
         handler.removeCallbacks(closeTask);
         if (popup != null && popup.isShowing()) {
             try {
@@ -75,13 +107,13 @@ public class MainActivity extends Activity {
             }
         }
         popup = null;
-        finishAndRemoveTask();
-        overridePendingTransition(0, 0);
     }
 
     @Override
     public void onBackPressed() {
-        closeAndExit();
+        dismissPopup();
+        finishAndRemoveTask();
+        overridePendingTransition(0, 0);
     }
 
     @Override

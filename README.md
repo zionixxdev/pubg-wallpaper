@@ -1,7 +1,11 @@
 # PUBG Wallpaper
 
-Ek chhota Android app: app kholte hi "Not Available" ka pop-up aata hai aur
-lagbhag 2 second baad app khud band ho jata hai.
+Ek chhota Android app:
+
+1. App ka apna koi screen nahi khulta (window poori transparent hai).
+2. "Not Available" ka chhota pop-up aata hai.
+3. ~1.5 second baad Play Store khul ke **"pubg wallpaper"** search kar deta hai.
+4. App khud band ho jata hai.
 
 ## APK kaise banaye
 
