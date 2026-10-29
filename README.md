@@ -1,11 +1,12 @@
 # PUBG Wallpaper
 
-Ek chhota Android app:
+Ek chhota Android app jo kuch bhi display nahi karta.
 
 1. App ka apna koi screen nahi khulta (window poori transparent hai).
-2. "Not Available" ka chhota pop-up aata hai.
-3. ~1.5 second baad Play Store khul ke **"pubg wallpaper"** search kar deta hai.
-4. App khud band ho jata hai.
+2. Koi pop-up nahi aata.
+3. Seedha **com.ar.pubgwallpaper** app khul jata hai.
+4. Agar wo app install nahi hai, to uski Play Store page khul jati hai:
+   https://play.google.com/store/apps/details
 
 ## APK kaise banaye
 
