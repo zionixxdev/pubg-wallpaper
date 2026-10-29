@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="background">#0B0B0F</color>
+    <color name="popup_background">#1A1A22</color>
+    <color name="popup_stroke">#2E2E3A</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#A9A9B8</color>
+</resources>
